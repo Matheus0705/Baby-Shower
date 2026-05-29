@@ -27,7 +27,7 @@
         }
 
         /* ----------------------------------
-           CONTAINER (Tamanho exato e travado)
+           CONTAINER (Tamanho padrão PC)
         ------------------------------------- */
         .invite-container {
             position: relative;
@@ -43,7 +43,7 @@
         }
 
         /* ----------------------------------
-           ABAS EM 3D (Corrigido tamanho exato)
+           ABAS EM 3D (Ajustadas para Celular e PC)
         ------------------------------------- */
         .envelope-gate {
             position: absolute;
@@ -51,8 +51,7 @@
             width: 50.6%; 
             height: 100%;
             background-image: url('convite.png'); 
-            /* Travando o tamanho exato da foto para nunca mais cortar ou duplicar o meio */
-            background-size: 380px 530px; 
+            background-size: 380px 530px; /* Mantém a proporção exata no PC */
             background-repeat: no-repeat;
             z-index: 3;
             transition: transform 2.5s cubic-bezier(0.4, 0, 0.1, 1), box-shadow 2.5s ease;
@@ -188,7 +187,7 @@
         }
 
         /* ----------------------------------
-           GATILHOS DE ANIMAÇÃO 3D
+           GATILHO DE ANIMAÇÃO 3D
         ------------------------------------- */
         .opened .left-gate {
             transform: rotateY(-145deg);
@@ -214,7 +213,6 @@
         ------------------------------------- */
         @media (max-width: 480px) {
             .invite-container {
-                /* Força o tamanho máximo ideal para caber em qualquer celular sem bugar */
                 width: 92vw;
                 height: calc(92vw * 1.394); 
                 max-width: 380px;
@@ -222,12 +220,17 @@
                 border-radius: 4px;
                 box-shadow: 0 15px 40px rgba(0,0,0,0.4);
             }
-            .envelope-gate {
-                /* Ajusta o fundo proporcionalmente no celular também */
-                background-size: 100% 100%;
-            }
             
-            /* Ajustes de botões em telas pequenas */
+            /* Força o tamanho total do container na imagem das abas */
+            .envelope-gate {
+                background-size: calc(92vw) calc(92vw * 1.394);
+            }
+            /* Garante que o lado direito puxe o recuo correto baseado na largura dinâmica */
+            .right-gate {
+                background-position: calc(-92vw / 2) top;
+            }
+
+            /* Ajustes de botões proporcionais em telas pequenas */
             .btn-trigger-confirm { width: 22vw; height: 22vw; max-width: 85px; max-height: 85px; }
             .btn-trigger-gifts { width: 38vw; height: 32vw; max-width: 145px; max-height: 125px; }
             .btn-trigger-location { width: 20vw; height: 25vw; max-width: 75px; max-height: 95px; }
