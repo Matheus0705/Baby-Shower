@@ -96,7 +96,7 @@
             z-index: 1;
             overflow-y: auto;
             overflow-x: hidden;
-            background-color: #f4f5f2; 
+            background-color: #f3f3ee; /* Puxando o tom do fundo da sua imagem */
             opacity: 0;
             transition: opacity 1.5s ease; 
         }
@@ -122,7 +122,7 @@
             height: auto;
         }
 
-        /* Container da segunda imagem */
+        /* Container da imagem botoes.png */
         .second-page-container {
             position: relative;
             width: 100%;
@@ -142,7 +142,7 @@
             font-size: 13px;
             color: #7a6860;
             padding: 15px 0;
-            background-color: #f4f5f2;
+            background-color: #f3f3ee;
             width: 100%;
             animation: bounce 2s infinite;
         }
@@ -154,38 +154,44 @@
         }
 
         /* ----------------------------------
-           ÁREAS CLICÁVEIS PERSONALIZADAS
+           ÁREAS CLICÁVEIS SOBRE "BOTOES.PNG"
         ------------------------------------- */
         
-        /* Botão Confirmar Presença (Grupo do WhatsApp) */
+        /* 1. Ícone do Check (Confirmação ao lado do bebê) */
         .btn-trigger-confirm {
             position: absolute;
-            bottom: 22%; /* Altere a porcentagem se precisar subir ou descer */
-            left: 50%;
-            transform: translateX(-50%);
-            width: 220px;  /* Ajuste a largura para cobrir seu ícone/botão da foto */
-            height: 50px;  /* Ajuste a altura para cobrir seu ícone/botão da foto */
+            top: 36%; 
+            left: 17%;
+            width: 75px;  
+            height: 75px;  
+            border-radius: 50%;
             cursor: pointer;
             z-index: 5;
-            
-            /* DICA DE TESTE: Deixei vermelho fraco para você ver onde o botão está caindo na foto. */
-            /* Quando estiver no lugar certo, mude para: background: transparent; */
-            background: rgba(255, 0, 0, 0.2); 
+            background: transparent; 
         }
 
-        /* Botão Localização (Google Maps ou similar) */
-        .btn-trigger-location {
+        /* 2. Carrinho de Bebê (Lista de Presentes) */
+        .btn-trigger-gifts {
             position: absolute;
-            bottom: 8%;  /* Altere a porcentagem se precisar subir ou descer */
-            left: 50%;
-            transform: translateX(-50%);
-            width: 220px; 
-            height: 50px;  
+            bottom: 3%;
+            left: 3%;
+            width: 140px;
+            height: 120px;
             cursor: pointer;
             z-index: 5;
-            
-            /* Mesma dica: mude para transparent depois que alinhar perfeitamente */
-            background: rgba(255, 0, 0, 0.2); 
+            background: transparent;
+        }
+
+        /* 3. Pin de Localização (Canto inferior direito) */
+        .btn-trigger-location {
+            position: absolute;
+            bottom: 12%;  
+            right: 12%;
+            width: 70px; 
+            height: 90px;  
+            cursor: pointer;
+            z-index: 5;
+            background: transparent; 
         }
 
         /* ----------------------------------
@@ -246,10 +252,13 @@
                 <div class="second-page-container" id="secondPage">
                     <img src="botoes.png" class="page-img" alt="Dados e Links">
                     
-                    <!-- BOTÃO DO LINK DO SEU GRUPO DO WHATSAPP -->
+                    <!-- LINK DO GRUPO DO WHATSAPP APLICADO NO CHECK DO BEBÊ -->
                     <a href="https://chat.whatsapp.com/IyYlGx2ZJWzEJIdvIb28sk" target="_blank" class="btn-trigger-confirm" title="Entrar no Grupo do WhatsApp"></a>
                     
-                    <!-- BOTÃO DE LOCALIZAÇÃO (Substitua o '#' pelo link do Google Maps do local) -->
+                    <!-- LINK DA LISTA DE PRESENTES (Substitua o '#' pelo link do site de presentes) -->
+                    <a href="#" target="_blank" class="btn-trigger-gifts" title="Ver Lista de Presentes"></a>
+                    
+                    <!-- LINK DE LOCALIZAÇÃO (Substitua o '#' pelo link do Google Maps) -->
                     <a href="#" target="_blank" class="btn-trigger-location" title="Ver Localização no Mapa"></a>
                 </div>
 
