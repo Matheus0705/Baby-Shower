@@ -7,7 +7,7 @@
     <style>
         :root {
             --bg-color: #0d1b15; 
-            --invite-bg: #f3f3ee; /* Cor de fundo das imagens */
+            --invite-bg: #f3f3ee; 
         }
 
         * {
@@ -27,19 +27,23 @@
         }
 
         /* ----------------------------------
-           CONTAINER INTELIGENTE (HÍBRIDO)
+           CONTAINER (Tamanho exato e travado)
         ------------------------------------- */
         .invite-container {
             position: relative;
-            width: 380px;  /* Tamanho padrão seguro para PC */
-            height: 530px; /* Tamanho padrão seguro para PC */
-            background-color: var(--invite-bg); 
+            width: 380px;  
+            height: 530px; 
+            background-color: var(--bg-color); 
             box-shadow: 0 30px 60px rgba(0,0,0,0.5);
-            perspective: 1500px; /* Efeito 3D isolado aqui dentro */
+            perspective: 1500px; 
+        }
+
+        .invite-container.opened {
+            background-color: var(--invite-bg);
         }
 
         /* ----------------------------------
-           ABAS EM 3D (Capa do Convite)
+           ABAS EM 3D (Corrigido tamanho exato)
         ------------------------------------- */
         .envelope-gate {
             position: absolute;
@@ -47,7 +51,8 @@
             width: 50.6%; 
             height: 100%;
             background-image: url('convite.png'); 
-            background-size: cover;
+            /* Travando o tamanho exato da foto para nunca mais cortar ou duplicar o meio */
+            background-size: 380px 530px; 
             background-repeat: no-repeat;
             z-index: 3;
             transition: transform 2.5s cubic-bezier(0.4, 0, 0.1, 1), box-shadow 2.5s ease;
@@ -56,17 +61,17 @@
 
         .left-gate {
             left: 0;
-            background-position: left center;
+            background-position: left top;
             transform-origin: left center;
         }
 
         .right-gate {
             right: 0;
-            background-position: right center;
+            background-position: right top;
             transform-origin: right center;
         }
 
-        /* O SELO INVISÍVEL (Centralizado sobre a emenda) */
+        /* O SELO INVISÍVEL */
         .wax-seal-trigger {
             position: absolute;
             top: 46%; 
@@ -81,7 +86,7 @@
         }
 
         /* ----------------------------------
-           CARTA INTERNA (Com Rolagem)
+           CARTA INTERNA
         ------------------------------------- */
         .inner-letter {
             position: absolute;
@@ -98,7 +103,6 @@
             -webkit-overflow-scrolling: touch;
         }
 
-        /* Esconde a barra de rolagem para o design ficar limpo */
         .inner-letter::-webkit-scrollbar {
             display: none;
         }
@@ -147,41 +151,37 @@
         }
 
         /* ----------------------------------
-           ÁREAS CLICÁVEIS AJUSTADAS
+           ÁREAS CLICÁVEIS PRECISAS
         ------------------------------------- */
-        
-        /* 1. Ícone do Check (Confirme sua presença) */
         .btn-trigger-confirm {
             position: absolute;
             top: 35%; 
             left: 10%; 
-            width: 22%;  
-            height: 22%;  
+            width: 85px;  
+            height: 85px;  
             border-radius: 50%;
             cursor: pointer;
             z-index: 5;
             background: transparent; 
         }
 
-        /* 2. Carrinho de Bebê (Lista de Presentes) */
         .btn-trigger-gifts {
             position: absolute;
             bottom: 2%;
             left: 2%;
-            width: 38%;
-            height: 22%;
+            width: 145px;
+            height: 125px;
             cursor: pointer;
             z-index: 5;
             background: transparent;
         }
 
-        /* 3. Pin de Localização (Canto inferior direito) */
         .btn-trigger-location {
             position: absolute;
             bottom: 11%;  
             right: 10%;
-            width: 20%; 
-            height: 18%;  
+            width: 75px; 
+            height: 95px;  
             cursor: pointer;
             z-index: 5;
             background: transparent; 
@@ -210,20 +210,27 @@
         }
 
         /* ----------------------------------
-           A MÁGICA DO MOBILE (TELA CHEIA REAL)
+           ADAPTAÇÃO ADICIONAL PARA CELULAR (MOBILE)
         ------------------------------------- */
         @media (max-width: 480px) {
-            body {
-                background-color: var(--invite-bg); /* Remove o fundo verde escuro no celular */
-            }
             .invite-container {
-                width: 100vw;
-                height: 100vh;
-                max-width: 100vw;
-                max-height: 100vh;
-                border-radius: 0;
-                box-shadow: none;
+                /* Força o tamanho máximo ideal para caber em qualquer celular sem bugar */
+                width: 92vw;
+                height: calc(92vw * 1.394); 
+                max-width: 380px;
+                max-height: 530px;
+                border-radius: 4px;
+                box-shadow: 0 15px 40px rgba(0,0,0,0.4);
             }
+            .envelope-gate {
+                /* Ajusta o fundo proporcionalmente no celular também */
+                background-size: 100% 100%;
+            }
+            
+            /* Ajustes de botões em telas pequenas */
+            .btn-trigger-confirm { width: 22vw; height: 22vw; max-width: 85px; max-height: 85px; }
+            .btn-trigger-gifts { width: 38vw; height: 32vw; max-width: 145px; max-height: 125px; }
+            .btn-trigger-location { width: 20vw; height: 25vw; max-width: 75px; max-height: 95px; }
         }
     </style>
 </head>
@@ -231,33 +238,25 @@
 
     <div class="invite-container" id="inviteContainer">
         
-        <!-- Área de clique sobre o selo -->
         <div class="wax-seal-trigger" onclick="openInvite()"></div>
 
-        <!-- Capas em 3D -->
+        <!-- Capas em 3D Corrigidas -->
         <div class="envelope-gate left-gate"></div>
         <div class="envelope-gate right-gate"></div>
 
-        <!-- Conteúdo Interno -->
+        <!-- Conteúdo Interno Seguro -->
         <div class="inner-letter" id="scroller">
             <div class="content-scroller">
                 
-                <!-- Primeira Imagem (conteudo.png) -->
                 <img src="conteudo.png" class="page-img" alt="Mensagem Interna">
 
                 <div class="scroll-hint">▼ Continue lendo abaixo ▼</div>
 
-                <!-- Segunda Imagem (botoes.png) -->
                 <div class="second-page-container" id="secondPage">
                     <img src="botoes.png" class="page-img" alt="Dados e Links">
                     
-                    <!-- LINK DO GRUPO DO WHATSAPP -->
                     <a href="https://chat.whatsapp.com/IyYlGx2ZJWzEJIdvIb28sk" target="_blank" class="btn-trigger-confirm" title="Entrar no Grupo do WhatsApp"></a>
-                    
-                    <!-- LINK DA LISTA DE PRESENTES -->
                     <a href="#" target="_blank" class="btn-trigger-gifts" title="Ver Lista de Presentes"></a>
-                    
-                    <!-- LINK DE LOCALIZAÇÃO -->
                     <a href="#" target="_blank" class="btn-trigger-location" title="Ver Localização no Mapa"></a>
                 </div>
 
