@@ -24,10 +24,13 @@
             align-items: center;
             overflow-x: hidden;
             font-family: 'Georgia', serif;
+            /* Suavização global de fontes e elementos */
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
         }
 
         /* ----------------------------------
-           CONTAINER (Travado na proporção da foto)
+           CONTAINER
         ------------------------------------- */
         .invite-container {
             position: relative;
@@ -37,15 +40,18 @@
             background-color: var(--invite-bg); 
             box-shadow: 0 30px 60px rgba(0,0,0,0.4);
             perspective: 2000px; 
+            /* Ativa aceleração por hardware para suavizar renderização */
+            transform: translateZ(0);
+            backface-visibility: hidden;
         }
 
         /* ----------------------------------
-           ABAS EM 3D (Máxima Nitidez com Tag Img)
+           ABAS EM 3D (Suaves e Sem Pixels)
         ------------------------------------- */
         .envelope-gate {
             position: absolute;
             top: 0;
-            width: 50%; /* Divisão exata ao meio para não criar degraus */
+            width: 50%; 
             height: 100%;
             overflow: hidden;
             z-index: 3;
@@ -64,17 +70,17 @@
             transform-origin: right center;
         }
 
-        /* Força o navegador a renderizar os traços finos sem borrar */
+        /* Ajustado para suavidade natural de alta definição */
         .gate-img {
             position: absolute;
             top: 0;
             height: 100%;
-            width: 200%; /* A imagem interna tem o dobro do tamanho da aba */
+            width: 200%; 
             display: block;
             object-fit: cover;
-            image-rendering: -webkit-optimize-contrast;
-            image-rendering: crisp-edges;
-            image-rendering: pixelated;
+            /* Remove o modo pixelado e usa a suavização inteligente nativa do celular */
+            image-rendering: auto; 
+            transform: translateZ(0); 
         }
 
         .left-gate .gate-img {
@@ -100,7 +106,7 @@
         }
 
         /* ----------------------------------
-           CARTA INTERNA (Resolução Limpa)
+           CARTA INTERNA (Suave e Legível)
         ------------------------------------- */
         .inner-letter {
             position: absolute;
@@ -128,25 +134,26 @@
             align-items: center;
         }
 
+        /* Imagens internas também suavizadas com qualidade padrão ouro */
         .page-img {
             width: 100%;
             display: block;
             height: auto;
-            image-rendering: -webkit-optimize-contrast;
-            image-rendering: crisp-edges;
+            image-rendering: auto;
+            transform: translateZ(0);
         }
 
         .second-page-container {
             position: relative;
             width: 100%;
             opacity: 0.1;
-            transform: translateY(20px);
+            transform: translateY(20px) translateZ(0);
             transition: all 0.8s ease-out;
         }
 
         .second-page-container.visible {
             opacity: 1;
-            transform: translateY(0);
+            transform: translateY(0) translateZ(0);
         }
 
         .scroll-hint {
@@ -222,7 +229,6 @@
             z-index: 2;
         }
 
-        /* Mantém o fundo branco nas laterais do celular se a tela for muito larga */
         @media (max-width: 480px) {
             body {
                 background-color: var(--invite-bg); 
@@ -239,14 +245,17 @@
         
         <div class="wax-seal-trigger" onclick="openInvite()"></div>
 
+        <!-- Porta Esquerda -->
         <div class="envelope-gate left-gate">
             <img src="convite.png" class="gate-img" alt="">
         </div>
 
+        <!-- Porta Direita -->
         <div class="envelope-gate right-gate">
             <img src="convite.png" class="gate-img" alt="">
         </div>
 
+        <!-- Conteúdo Interno Suave e Legível -->
         <div class="inner-letter" id="scroller">
             <div class="content-scroller">
                 
