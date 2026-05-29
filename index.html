@@ -28,7 +28,7 @@
             justify-content: center;
             align-items: center;
             overflow: hidden;
-            perspective: 1500px; /* Cria o ambiente 3D para as abas */
+            perspective: 1500px; 
         }
 
         /* Container Principal */
@@ -37,9 +37,16 @@
             width: 380px;
             height: 530px;
             box-shadow: 0 30px 60px rgba(0,0,0,0.6);
-            background-color: var(--letter-bg);
+            /* Usamos a cor escura temporariamente para camuflar qualquer fresta de pixel */
+            background-color: var(--bg-color); 
             border-radius: 4px;
             transform-style: preserve-3d; 
+            transition: background-color 0.5s ease;
+        }
+
+        /* Quando aberto, o fundo do container volta a ser claro para a carta */
+        .invite-container.opened {
+            background-color: var(--letter-bg);
         }
 
         /* ----------------------------------
@@ -48,52 +55,49 @@
         .envelope-gate {
             position: absolute;
             top: 0;
-            width: 50%;
+            /* Aumentado sutilmente para 50.5% para criar uma micro-sobreposição e eliminar a linha branca */
+            width: 50.5%; 
             height: 100%;
             background-image: url('convite.png'); /* Sua imagem aqui */
             background-size: 380px 530px;
             background-repeat: no-repeat;
             z-index: 3;
-            transition: transform 1.6s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 1.6s ease;
+            /* Transição alterada para 2.5 segundos com uma curva de velocidade super elegante */
+            transition: transform 2.5s cubic-bezier(0.4, 0, 0.1, 1), box-shadow 2.5s ease;
             backface-visibility: hidden;
         }
 
-        /* Aba Esquerda (Ines) - Dobra para a esquerda */
+        /* Aba Esquerda (Ines) */
         .left-gate {
             left: 0;
             background-position: left top;
             transform-origin: left center;
-            /* Linha preta removida daqui */
         }
 
-        /* Aba Direita (Sandro) - Dobra para a direita */
+        /* Aba Direita (Sandro) */
         .right-gate {
             right: 0;
             background-position: right top;
             transform-origin: right center;
         }
 
-        /* O SELO INVISÍVEL (Área de clique perfeita sobre o selo real da foto) */
+        /* O SELO INVISÍVEL (Área de clique perfeita) */
         .wax-seal-trigger {
             position: absolute;
             top: 46%; 
             left: 50%;
-            transform: translate(-50%, -50%) translateZ(5px);
-            width: 110px; /* Cobre o selo e a frase redonda para facilitar o clique */
-            height: 110px;
+            transform: translate(-50%, -50%) translateZ(10px);
+            width: 120px; 
+            height: 120px;
             border-radius: 50%;
             z-index: 4;
             cursor: pointer;
-            background: transparent; /* Totalmente invisível para não tampar nada */
-            display: flex;
-            justify-content: center;
-            align-items: center;
+            background: transparent; 
         }
 
-        /* Efeito sutil ao passar o mouse para o usuário saber que dá para clicar */
         .wax-seal-trigger:hover {
-            transform: translate(-50%, -50%) translateZ(8px) scale(1.05);
-            transition: transform 0.2s ease;
+            transform: translate(-50%, -50%) translateZ(15px) scale(1.02);
+            transition: transform 0.3s ease;
         }
 
         /* ----------------------------------
@@ -111,6 +115,9 @@
             color: var(--text-dark);
             background-color: var(--off-white);
             box-shadow: inset 0 0 30px rgba(0,0,0,0.05);
+            opacity: 0;
+            /* A carta surge suavemente no final da abertura */
+            transition: opacity 1.5s ease; 
         }
 
         /* Estilização interna */
@@ -184,24 +191,22 @@
            GATILHO DE ANIMAÇÃO (Aberto)
         ------------------------------------- */
         
-        /* Gira a aba esquerda para fora */
         .opened .left-gate {
             transform: rotateY(-145deg);
             box-shadow: 25px 0 30px rgba(0,0,0,0.3);
         }
 
-        /* Gira a aba direita para fora */
         .opened .right-gate {
             transform: rotateY(145deg);
             box-shadow: -25px 0 30px rgba(0,0,0,0.3);
         }
 
-        /* Desativa o botão invisível após aberto para liberar a rolagem da carta */
         .opened .wax-seal-trigger {
             display: none;
         }
 
         .opened .inner-letter {
+            opacity: 1;
             z-index: 2;
         }
 
@@ -214,11 +219,6 @@
             .envelope-gate {
                 background-size: 320px 450px;
             }
-            .wax-seal-trigger {
-                width: 90px;
-                height: 90px;
-                top: 46%;
-            }
         }
     </style>
 </head>
@@ -226,11 +226,14 @@
 
     <div class="invite-container" id="inviteContainer">
         
+        <!-- Área de toque transparente sobre o selo -->
         <div class="wax-seal-trigger" onclick="openInvite()"></div>
 
+        <!-- Portas com micro-ajuste antiqueda de pixel/linha branca -->
         <div class="envelope-gate left-gate"></div>
         <div class="envelope-gate right-gate"></div>
 
+        <!-- Conteúdo Interno -->
         <div class="inner-letter">
             <h2>Chá de Bebê</h2>
             <p>Queridos amigos e familiares, estamos preparando tudo com muito amor para a chegada do nosso maior presente.</p>
