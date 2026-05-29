@@ -2,12 +2,12 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Chá de Bebê - Ines & Sandro</title>
     <style>
         :root {
             --bg-color: #0d1b15; 
-            --letter-bg: #ffffff;
+            --invite-bg: #f3f3ee; /* Tom de fundo das suas imagens */
         }
 
         * {
@@ -16,42 +16,46 @@
             padding: 0;
         }
 
+        /* Ajuste do corpo para sumir com as bordas pretas vazias */
         body {
             background-color: var(--bg-color);
             min-height: 100vh;
+            min-height: -webkit-fill-available; /* Correção para navegadores iOS (Safari) */
             display: flex;
             justify-content: center;
             align-items: center;
             overflow: hidden;
             perspective: 1500px; 
+            font-family: 'Georgia', serif;
         }
 
-        /* Container Principal */
+        /* ----------------------------------
+           CONTAINER RESPONSIVO (TELA CHEIA NO MOBILE)
+        ------------------------------------- */
         .invite-container {
             position: relative;
-            width: 380px;
-            height: 530px;
-            box-shadow: 0 30px 60px rgba(0,0,0,0.6);
-            background-color: var(--bg-color); 
-            border-radius: 8px;
+            width: 100vw;
+            height: 100vh;
+            height: -webkit-fill-available;
+            max-width: 420px; /* Mantém um limite elegante caso abram no computador */
+            max-height: 740px;
+            background-color: var(--invite-bg); 
+            box-shadow: 0 20px 50px rgba(0,0,0,0.4);
             transform-style: preserve-3d; 
             transition: background-color 0.5s ease;
         }
 
-        .invite-container.opened {
-            background-color: var(--letter-bg);
-        }
-
         /* ----------------------------------
-           ABAS EM 3D (Capa do Convite)
+           ABAS EM 3D (Capa Ajustável)
         ------------------------------------- */
         .envelope-gate {
             position: absolute;
             top: 0;
-            width: 50.5%; 
+            width: 50.6%; /* Micro sobreposição para evitar a linha branca no meio */
             height: 100%;
             background-image: url('convite.png'); 
-            background-size: 380px 530px;
+            background-size: cover;
+            background-position: center;
             background-repeat: no-repeat;
             z-index: 3;
             transition: transform 2.5s cubic-bezier(0.4, 0, 0.1, 1), box-shadow 2.5s ease;
@@ -60,24 +64,26 @@
 
         .left-gate {
             left: 0;
-            background-position: left top;
+            background-position: left center;
             transform-origin: left center;
         }
 
         .right-gate {
             right: 0;
-            background-position: right top;
+            background-position: right center;
             transform-origin: right center;
         }
 
-        /* O SELO INVISÍVEL */
+        /* O SELO INVISÍVEL (Área de toque centralizada na proporção da tela) */
         .wax-seal-trigger {
             position: absolute;
             top: 46%; 
             left: 50%;
             transform: translate(-50%, -50%) translateZ(10px);
-            width: 120px; 
-            height: 120px;
+            width: 25vw; 
+            max-width: 110px;
+            height: 25vw;
+            max-height: 110px;
             border-radius: 50%;
             z-index: 4;
             cursor: pointer;
@@ -85,7 +91,7 @@
         }
 
         /* ----------------------------------
-           CARTA INTERNA (Imagens seguidas)
+           CARTA INTERNA IMERSIVA
         ------------------------------------- */
         .inner-letter {
             position: absolute;
@@ -96,17 +102,15 @@
             z-index: 1;
             overflow-y: auto;
             overflow-x: hidden;
-            background-color: #f3f3ee; /* Puxando o tom do fundo da sua imagem */
+            background-color: var(--invite-bg); 
             opacity: 0;
             transition: opacity 1.5s ease; 
+            -webkit-overflow-scrolling: touch; /* Rolagem macia no iPhone */
         }
 
+        /* Esconde a barra de rolagem para o visual ficar ultra limpo */
         .inner-letter::-webkit-scrollbar {
-            width: 4px;
-        }
-        .inner-letter::-webkit-scrollbar-thumb {
-            background-color: #a3ccc0;
-            border-radius: 10px;
+            display: none;
         }
 
         .content-scroller {
@@ -126,8 +130,8 @@
         .second-page-container {
             position: relative;
             width: 100%;
-            opacity: 0.3;
-            transform: translateY(40px);
+            opacity: 0.1;
+            transform: translateY(30px);
             transition: all 1.2s ease-out;
         }
 
@@ -138,11 +142,10 @@
 
         .scroll-hint {
             text-align: center;
-            font-family: 'Georgia', serif;
             font-size: 13px;
             color: #7a6860;
-            padding: 15px 0;
-            background-color: #f3f3ee;
+            padding: 20px 0;
+            background-color: var(--invite-bg);
             width: 100%;
             animation: bounce 2s infinite;
         }
@@ -154,16 +157,17 @@
         }
 
         /* ----------------------------------
-           ÁREAS CLICÁVEIS SOBRE "BOTOES.PNG"
+           ÁREAS CLICÁVEIS PROPORCIONAIS NA TELA
         ------------------------------------- */
         
-        /* 1. Ícone do Check (Confirmação ao lado do bebê) */
+        /* 1. Ícone do Check (Confirme sua presença) */
         .btn-trigger-confirm {
             position: absolute;
-            top: 36%; 
-            left: 17%;
-            width: 75px;  
-            height: 75px;  
+            top: 35%; 
+            left: 10%; 
+            width: 22%;  
+            height: 16vw;
+            max-height: 80px;  
             border-radius: 50%;
             cursor: pointer;
             z-index: 5;
@@ -173,10 +177,11 @@
         /* 2. Carrinho de Bebê (Lista de Presentes) */
         .btn-trigger-gifts {
             position: absolute;
-            bottom: 3%;
-            left: 3%;
-            width: 140px;
-            height: 120px;
+            bottom: 2%;
+            left: 2%;
+            width: 38%;
+            height: 22vw;
+            max-height: 120px;
             cursor: pointer;
             z-index: 5;
             background: transparent;
@@ -185,10 +190,11 @@
         /* 3. Pin de Localização (Canto inferior direito) */
         .btn-trigger-location {
             position: absolute;
-            bottom: 12%;  
-            right: 12%;
-            width: 70px; 
-            height: 90px;  
+            bottom: 11%;  
+            right: 10%;
+            width: 20%; 
+            height: 18vw;  
+            max-height: 95px;
             cursor: pointer;
             z-index: 5;
             background: transparent; 
@@ -199,12 +205,12 @@
         ------------------------------------- */
         .opened .left-gate {
             transform: rotateY(-145deg);
-            box-shadow: 25px 0 30px rgba(0,0,0,0.3);
+            box-shadow: 25px 0 30px rgba(0,0,0,0.2);
         }
 
         .opened .right-gate {
             transform: rotateY(145deg);
-            box-shadow: -25px 0 30px rgba(0,0,0,0.3);
+            box-shadow: -25px 0 30px rgba(0,0,0,0.2);
         }
 
         .opened .wax-seal-trigger {
@@ -216,14 +222,16 @@
             z-index: 2;
         }
 
-        /* Ajustes Mobile */
-        @media (max-width: 400px) {
+        /* Adaptação agressiva para Celulares ficarem 100% tela cheia real */
+        @media (max-width: 480px) {
             .invite-container {
-                width: 320px;
-                height: 450px;
+                max-width: 100vw;
+                max-height: 100vh;
+                border-radius: 0; /* Remove bordinhas nos cantos para virar tela cheia de verdade */
+                box-shadow: none;
             }
-            .envelope-gate {
-                background-size: 320px 450px;
+            body {
+                background-color: var(--invite-bg); /* O fundo preto vira o fundo do convite no celular */
             }
         }
     </style>
@@ -252,13 +260,13 @@
                 <div class="second-page-container" id="secondPage">
                     <img src="botoes.png" class="page-img" alt="Dados e Links">
                     
-                    <!-- LINK DO GRUPO DO WHATSAPP APLICADO NO CHECK DO BEBÊ -->
+                    <!-- LINK DO GRUPO DO WHATSAPP -->
                     <a href="https://chat.whatsapp.com/IyYlGx2ZJWzEJIdvIb28sk" target="_blank" class="btn-trigger-confirm" title="Entrar no Grupo do WhatsApp"></a>
                     
-                    <!-- LINK DA LISTA DE PRESENTES (Substitua o '#' pelo link do site de presentes) -->
+                    <!-- LINK DA LISTA DE PRESENTES -->
                     <a href="#" target="_blank" class="btn-trigger-gifts" title="Ver Lista de Presentes"></a>
                     
-                    <!-- LINK DE LOCALIZAÇÃO (Substitua o '#' pelo link do Google Maps) -->
+                    <!-- LINK DE LOCALIZAÇÃO -->
                     <a href="#" target="_blank" class="btn-trigger-location" title="Ver Localização no Mapa"></a>
                 </div>
 
@@ -276,7 +284,8 @@
         const secondPage = document.getElementById('secondPage');
 
         scroller.addEventListener('scroll', () => {
-            if (scroller.scrollTop > 60) {
+            // Ativa quando o usuário rola um pouquinho a página
+            if (scroller.scrollTop > 40) {
                 secondPage.classList.add('visible');
             }
         });
