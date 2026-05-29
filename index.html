@@ -6,8 +6,7 @@
     <title>Chá de Bebê - Ines & Sandro</title>
     <style>
         :root {
-            /* Paleta de cores extraída da sua imagem */
-            --bg-color: #0d1b15; /* Fundo escuro para destacar o convite */
+            --bg-color: #0d1b15; 
             --mint-color: #a3ccc0;
             --off-white: #f3f4f1;
             --text-dark: #5c4a43;
@@ -29,56 +28,63 @@
             justify-content: center;
             align-items: center;
             overflow: hidden;
+            /* Ativa o ambiente 3D para a dobra das abas */
+            perspective: 1200px; 
         }
 
-        /* Container do Convite Fechado e Aberto */
+        /* Container Principal */
         .invite-container {
             position: relative;
             width: 380px;
             height: 530px;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+            box-shadow: 0 30px 60px rgba(0,0,0,0.6);
             background-color: var(--letter-bg);
             border-radius: 4px;
-            overflow: hidden;
+            /* Permite que elementos filhos usem coordenadas 3D */
+            transform-style: preserve-3d; 
         }
 
         /* ----------------------------------
-           O ENVELOPE (A imagem dividida)
+           ABAS EM 3D (Efeito Panfleto/Livro)
         ------------------------------------- */
-        .envelope-half {
+        .envelope-gate {
             position: absolute;
             top: 0;
             width: 50%;
             height: 100%;
             background-image: url('convite.png'); /* Sua imagem aqui */
-            background-size: 380px 530px; /* Mantém a proporção exata do container */
+            background-size: 380px 530px;
             background-repeat: no-repeat;
             z-index: 3;
-            transition: transform 1.2s cubic-bezier(0.7, 0, 0.3, 1);
+            /* Define a velocidade e suavidade da dobra */
+            transition: transform 1.5s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 1.5s ease;
+            backface-visibility: hidden;
         }
 
-        /* Metade Esquerda (Ines) */
-        .left-side {
+        /* Aba Esquerda (Ines) - Gira fixada na borda esquerda */
+        .left-gate {
             left: 0;
             background-position: left top;
-            border-right: 1px solid rgba(0,0,0,0.05);
+            transform-origin: left center;
+            border-right: 1px solid rgba(0,0,0,0.1);
         }
 
-        /* Metade Direita (Sandro) */
-        .right-side {
+        /* Aba Direita (Sandro) - Gira fixada na borda direita */
+        .right-gate {
             right: 0;
             background-position: right top;
+            transform-origin: right center;
         }
 
-        /* O Selo Centralizado */
+        /* O Selo Central */
         .wax-seal {
             position: absolute;
-            top: 46%; /* Alinhado exatamente sobre o selo da foto */
+            top: 46%; 
             left: 50%;
-            transform: translate(-50%, -50%);
+            transform: translate(-50%, -50%) translateZ(1px); /* Mantém o selo um tiquinho à frente da aba */
             width: 65px;
             height: 65px;
-            background-color: #8c6961; /* Tom aproximado do selo */
+            background-color: #8c6961; 
             border-radius: 50%;
             z-index: 4;
             cursor: pointer;
@@ -86,31 +92,11 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            transition: opacity 0.5s ease, transform 0.5s ease;
-        }
-
-        /* Texto circular simulado ao redor do selo */
-        .seal-text {
-            position: absolute;
-            width: 110px;
-            height: 110px;
-            color: var(--accent-gold);
-            font-size: 11px;
-            font-weight: bold;
-            text-align: center;
-            animation: rotateText 10s linear infinite;
-            pointer-events: none;
-            z-index: 4;
-            transition: opacity 0.4s ease;
-        }
-
-        @keyframes rotateText {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+            transition: opacity 0.4s ease, transform 0.4s ease;
         }
 
         /* ----------------------------------
-           A CARTA INTERNA (Conteúdo pós-abertura)
+           A CARTA INTERNA (Por trás das abas)
         ------------------------------------- */
         .inner-letter {
             position: absolute;
@@ -123,11 +109,10 @@
             overflow-y: auto;
             color: var(--text-dark);
             background-color: var(--off-white);
-            opacity: 0;
-            transition: opacity 0.6s ease;
+            box-shadow: inset 0 0 30px rgba(0,0,0,0.05);
         }
 
-        /* Estilização interna inspirada no convite */
+        /* Estilização interna */
         .inner-letter h2 {
             text-align: center;
             font-size: 26px;
@@ -195,39 +180,40 @@
         }
 
         /* ----------------------------------
-           GATILHO DE ANIMAÇÃO (Aberto)
+           GATILHO DE ANIMAÇÃO (Abertura Livro/Panfleto)
         ------------------------------------- */
-        .opened .left-side {
-            transform: translateX(-100%); /* Desliza para esquerda */
+        
+        /* Gira a aba esquerda para trás/fora (-130 graus para dar ângulo de visão) */
+        .opened .left-gate {
+            transform: rotateY(-140deg);
+            box-shadow: 15px 0 20px rgba(0,0,0,0.2);
         }
 
-        .opened .right-side {
-            transform: translateX(100%); /* Desliza para direita */
+        /* Gira a aba direita para trás/fora (140 graus) */
+        .opened .right-gate {
+            transform: rotateY(140deg);
+            box-shadow: -15px 0 20px rgba(0,0,0,0.2);
         }
 
+        /* Sumido sutil com o selo */
         .opened .wax-seal {
             opacity: 0;
-            transform: translate(-50%, -50%) scale(0.5);
+            transform: translate(-50%, -50%) scale(0.6);
             pointer-events: none;
         }
 
-        .opened .seal-text {
-            opacity: 0;
-        }
-
+        /* Garante que o conteúdo ganhe foco após a abertura */
         .opened .inner-letter {
-            opacity: 1;
             z-index: 2;
-            transition-delay: 0.4s; /* Aparece suavemente enquanto as portas abrem */
         }
 
-        /* Ajustes para Telas Pequenas */
+        /* Ajustes Mobile */
         @media (max-width: 400px) {
             .invite-container {
                 width: 320px;
                 height: 450px;
             }
-            .envelope-half {
+            .envelope-gate {
                 background-size: 320px 450px;
             }
         }
@@ -235,16 +221,14 @@
 </head>
 <body>
 
-    <div class="seal-text" id="sealText">✦ clique para abrir ✦ clique para abrir </div>
-
     <div class="invite-container" id="inviteContainer">
         
         <div class="wax-seal" onclick="openInvite()">
-            <span style="color: rgba(255,255,255,0.4); font-size: 20px;">❤</span>
+            <span style="color: rgba(255,255,255,0.6); font-size: 20px;">❤</span>
         </div>
 
-        <div class="envelope-half left-side"></div>
-        <div class="envelope-half right-side"></div>
+        <div class="envelope-gate left-gate"></div>
+        <div class="envelope-gate right-gate"></div>
 
         <div class="inner-letter">
             <h2>Chá de Bebê</h2>
@@ -274,18 +258,8 @@
     </div>
 
     <script>
-        // Transforma o texto em círculo perfeito ao redor do selo
-        const text = document.getElementById('sealText');
-        text.innerHTML = text.textContent.replace(/\S/g, "<span style='position:absolute; left:50%; transform-origin:0 55px;'>$&</span>");
-        const spans = text.querySelectorAll('span');
-        spans.forEach((span, i) => {
-            span.style.transform = `translateX(-50%) rotate(${i * 15}deg)`;
-        });
-
         function openInvite() {
-            // Adiciona a classe que executa os cortes e transições CSS
             document.getElementById('inviteContainer').classList.add('opened');
-            document.getElementById('sealText').classList.add('opened');
         }
     </script>
 </body>
