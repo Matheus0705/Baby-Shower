@@ -28,8 +28,7 @@
             justify-content: center;
             align-items: center;
             overflow: hidden;
-            /* Ativa o ambiente 3D para a dobra das abas */
-            perspective: 1200px; 
+            perspective: 1500px; /* Cria o ambiente 3D para as abas */
         }
 
         /* Container Principal */
@@ -40,7 +39,6 @@
             box-shadow: 0 30px 60px rgba(0,0,0,0.6);
             background-color: var(--letter-bg);
             border-radius: 4px;
-            /* Permite que elementos filhos usem coordenadas 3D */
             transform-style: preserve-3d; 
         }
 
@@ -56,47 +54,50 @@
             background-size: 380px 530px;
             background-repeat: no-repeat;
             z-index: 3;
-            /* Define a velocidade e suavidade da dobra */
-            transition: transform 1.5s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 1.5s ease;
+            transition: transform 1.6s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 1.6s ease;
             backface-visibility: hidden;
         }
 
-        /* Aba Esquerda (Ines) - Gira fixada na borda esquerda */
+        /* Aba Esquerda (Ines) - Dobra para a esquerda */
         .left-gate {
             left: 0;
             background-position: left top;
             transform-origin: left center;
-            border-right: 1px solid rgba(0,0,0,0.1);
+            /* Linha preta removida daqui */
         }
 
-        /* Aba Direita (Sandro) - Gira fixada na borda direita */
+        /* Aba Direita (Sandro) - Dobra para a direita */
         .right-gate {
             right: 0;
             background-position: right top;
             transform-origin: right center;
         }
 
-        /* O Selo Central */
-        .wax-seal {
+        /* O SELO INVISÍVEL (Área de clique perfeita sobre o selo real da foto) */
+        .wax-seal-trigger {
             position: absolute;
             top: 46%; 
             left: 50%;
-            transform: translate(-50%, -50%) translateZ(1px); /* Mantém o selo um tiquinho à frente da aba */
-            width: 65px;
-            height: 65px;
-            background-color: #8c6961; 
+            transform: translate(-50%, -50%) translateZ(5px);
+            width: 110px; /* Cobre o selo e a frase redonda para facilitar o clique */
+            height: 110px;
             border-radius: 50%;
             z-index: 4;
             cursor: pointer;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            background: transparent; /* Totalmente invisível para não tampar nada */
             display: flex;
             justify-content: center;
             align-items: center;
-            transition: opacity 0.4s ease, transform 0.4s ease;
+        }
+
+        /* Efeito sutil ao passar o mouse para o usuário saber que dá para clicar */
+        .wax-seal-trigger:hover {
+            transform: translate(-50%, -50%) translateZ(8px) scale(1.05);
+            transition: transform 0.2s ease;
         }
 
         /* ----------------------------------
-           A CARTA INTERNA (Por trás das abas)
+           A CARTA INTERNA (Conteúdo)
         ------------------------------------- */
         .inner-letter {
             position: absolute;
@@ -180,29 +181,26 @@
         }
 
         /* ----------------------------------
-           GATILHO DE ANIMAÇÃO (Abertura Livro/Panfleto)
+           GATILHO DE ANIMAÇÃO (Aberto)
         ------------------------------------- */
         
-        /* Gira a aba esquerda para trás/fora (-130 graus para dar ângulo de visão) */
+        /* Gira a aba esquerda para fora */
         .opened .left-gate {
-            transform: rotateY(-140deg);
-            box-shadow: 15px 0 20px rgba(0,0,0,0.2);
+            transform: rotateY(-145deg);
+            box-shadow: 25px 0 30px rgba(0,0,0,0.3);
         }
 
-        /* Gira a aba direita para trás/fora (140 graus) */
+        /* Gira a aba direita para fora */
         .opened .right-gate {
-            transform: rotateY(140deg);
-            box-shadow: -15px 0 20px rgba(0,0,0,0.2);
+            transform: rotateY(145deg);
+            box-shadow: -25px 0 30px rgba(0,0,0,0.3);
         }
 
-        /* Sumido sutil com o selo */
-        .opened .wax-seal {
-            opacity: 0;
-            transform: translate(-50%, -50%) scale(0.6);
-            pointer-events: none;
+        /* Desativa o botão invisível após aberto para liberar a rolagem da carta */
+        .opened .wax-seal-trigger {
+            display: none;
         }
 
-        /* Garante que o conteúdo ganhe foco após a abertura */
         .opened .inner-letter {
             z-index: 2;
         }
@@ -216,6 +214,11 @@
             .envelope-gate {
                 background-size: 320px 450px;
             }
+            .wax-seal-trigger {
+                width: 90px;
+                height: 90px;
+                top: 46%;
+            }
         }
     </style>
 </head>
@@ -223,9 +226,7 @@
 
     <div class="invite-container" id="inviteContainer">
         
-        <div class="wax-seal" onclick="openInvite()">
-            <span style="color: rgba(255,255,255,0.6); font-size: 20px;">❤</span>
-        </div>
+        <div class="wax-seal-trigger" onclick="openInvite()"></div>
 
         <div class="envelope-gate left-gate"></div>
         <div class="envelope-gate right-gate"></div>
