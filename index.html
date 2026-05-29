@@ -22,20 +22,21 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            overflow: hidden;
+            overflow-x: hidden;
             font-family: 'Georgia', serif;
         }
 
         /* ----------------------------------
-           CONTAINER (Tamanho padrão PC)
+           CONTAINER (Adaptável e Nítido)
         ------------------------------------- */
         .invite-container {
             position: relative;
-            width: 380px;  
-            height: 530px; 
+            width: 100vw;
+            max-width: 400px; /* Limite elegante para telas grandes/PC */
+            aspect-ratio: 380 / 530; /* Força a proporção perfeita da sua imagem original */
             background-color: var(--bg-color); 
             box-shadow: 0 30px 60px rgba(0,0,0,0.5);
-            perspective: 1500px; 
+            perspective: 2000px; 
         }
 
         .invite-container.opened {
@@ -43,41 +44,41 @@
         }
 
         /* ----------------------------------
-           ABAS EM 3D (Ajustadas para Celular e PC)
+           ABAS EM 3D (Corte e Alinhamento Perfeitos)
         ------------------------------------- */
         .envelope-gate {
             position: absolute;
             top: 0;
-            width: 50.6%; 
+            width: 50.5%; 
             height: 100%;
             background-image: url('convite.png'); 
-            background-size: 380px 530px; /* Mantém a proporção exata no PC */
+            background-size: 200% 100%; /* Faz a imagem cobrir as duas abas proporcionalmente */
             background-repeat: no-repeat;
             z-index: 3;
-            transition: transform 2.5s cubic-bezier(0.4, 0, 0.1, 1), box-shadow 2.5s ease;
+            transition: transform 2.2s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 2.2s ease;
             backface-visibility: hidden;
         }
 
         .left-gate {
             left: 0;
-            background-position: left top;
+            background-position: left center;
             transform-origin: left center;
         }
 
         .right-gate {
             right: 0;
-            background-position: right top;
+            background-position: right center;
             transform-origin: right center;
         }
 
-        /* O SELO INVISÍVEL */
+        /* O SELO INVISÍVEL COBRINHO O BOTÃO CENTRAL */
         .wax-seal-trigger {
             position: absolute;
             top: 46%; 
             left: 50%;
-            transform: translate(-50%, -50%);
-            width: 100px; 
-            height: 100px;
+            transform: translate(-50%, -50%) translateZ(5px);
+            width: 24%; 
+            aspect-ratio: 1 / 1;
             border-radius: 50%;
             z-index: 4;
             cursor: pointer;
@@ -85,7 +86,7 @@
         }
 
         /* ----------------------------------
-           CARTA INTERNA
+           CARTA INTERNA (Resolução Máxima)
         ------------------------------------- */
         .inner-letter {
             position: absolute;
@@ -98,7 +99,7 @@
             overflow-x: hidden;
             background-color: var(--invite-bg); 
             opacity: 0;
-            transition: opacity 1.5s ease; 
+            transition: opacity 1s ease; 
             -webkit-overflow-scrolling: touch;
         }
 
@@ -116,16 +117,16 @@
         .page-img {
             width: 100%;
             display: block;
-            height: auto;
+            height: auto; /* Garante que a imagem use sua resolução nativa sem achatar */
         }
 
-        /* Container da imagem botoes.png */
+        /* Container da segunda página */
         .second-page-container {
             position: relative;
             width: 100%;
             opacity: 0.1;
-            transform: translateY(30px);
-            transition: all 1.2s ease-out;
+            transform: translateY(20px);
+            transition: all 0.8s ease-out;
         }
 
         .second-page-container.visible {
@@ -150,14 +151,14 @@
         }
 
         /* ----------------------------------
-           ÁREAS CLICÁVEIS PRECISAS
+           ÁREAS CLICÁVEIS MAPEADAS POR PORCENTAGEM
         ------------------------------------- */
         .btn-trigger-confirm {
             position: absolute;
-            top: 35%; 
-            left: 10%; 
-            width: 85px;  
-            height: 85px;  
+            top: 34%; 
+            left: 9%; 
+            width: 24%;  
+            aspect-ratio: 1 / 1;  
             border-radius: 50%;
             cursor: pointer;
             z-index: 5;
@@ -168,8 +169,8 @@
             position: absolute;
             bottom: 2%;
             left: 2%;
-            width: 145px;
-            height: 125px;
+            width: 38%;
+            height: 24%;
             cursor: pointer;
             z-index: 5;
             background: transparent;
@@ -179,24 +180,24 @@
             position: absolute;
             bottom: 11%;  
             right: 10%;
-            width: 75px; 
-            height: 95px;  
+            width: 20%; 
+            height: 18%;  
             cursor: pointer;
             z-index: 5;
             background: transparent; 
         }
 
         /* ----------------------------------
-           GATILHO DE ANIMAÇÃO 3D
+           GATILHOS DE ANIMAÇÃO 3D
         ------------------------------------- */
         .opened .left-gate {
-            transform: rotateY(-145deg);
-            box-shadow: 25px 0 30px rgba(0,0,0,0.2);
+            transform: rotateY(-150deg);
+            box-shadow: 20px 0 25px rgba(0,0,0,0.15);
         }
 
         .opened .right-gate {
-            transform: rotateY(145deg);
-            box-shadow: -25px 0 30px rgba(0,0,0,0.2);
+            transform: rotateY(150deg);
+            box-shadow: -20px 0 25px rgba(0,0,0,0.15);
         }
 
         .opened .wax-seal-trigger {
@@ -208,32 +209,15 @@
             z-index: 2;
         }
 
-        /* ----------------------------------
-           ADAPTAÇÃO ADICIONAL PARA CELULAR (MOBILE)
-        ------------------------------------- */
+        /* Ajuste fino para telas mobile se adaptarem ao tamanho vivificado */
         @media (max-width: 480px) {
+            body {
+                background-color: var(--invite-bg); /* Integra o fundo das laterais caso sobre espaço */
+            }
             .invite-container {
-                width: 92vw;
-                height: calc(92vw * 1.394); 
-                max-width: 380px;
-                max-height: 530px;
-                border-radius: 4px;
-                box-shadow: 0 15px 40px rgba(0,0,0,0.4);
+                width: 100vw; /* Ocupa a largura total real do visor do celular */
+                box-shadow: none;
             }
-            
-            /* Força o tamanho total do container na imagem das abas */
-            .envelope-gate {
-                background-size: calc(92vw) calc(92vw * 1.394);
-            }
-            /* Garante que o lado direito puxe o recuo correto baseado na largura dinâmica */
-            .right-gate {
-                background-position: calc(-92vw / 2) top;
-            }
-
-            /* Ajustes de botões proporcionais em telas pequenas */
-            .btn-trigger-confirm { width: 22vw; height: 22vw; max-width: 85px; max-height: 85px; }
-            .btn-trigger-gifts { width: 38vw; height: 32vw; max-width: 145px; max-height: 125px; }
-            .btn-trigger-location { width: 20vw; height: 25vw; max-width: 75px; max-height: 95px; }
         }
     </style>
 </head>
@@ -241,13 +225,14 @@
 
     <div class="invite-container" id="inviteContainer">
         
+        <!-- Clique para abrir sobre o selo original -->
         <div class="wax-seal-trigger" onclick="openInvite()"></div>
 
-        <!-- Capas em 3D Corrigidas -->
+        <!-- Capas em 3D sem cortes ou duplicações -->
         <div class="envelope-gate left-gate"></div>
         <div class="envelope-gate right-gate"></div>
 
-        <!-- Conteúdo Interno Seguro -->
+        <!-- Conteúdo Interno Nítido -->
         <div class="inner-letter" id="scroller">
             <div class="content-scroller">
                 
@@ -258,6 +243,7 @@
                 <div class="second-page-container" id="secondPage">
                     <img src="botoes.png" class="page-img" alt="Dados e Links">
                     
+                    <!-- Link de Confirmação perfeitamente posicionado sobre o círculo do check -->
                     <a href="https://chat.whatsapp.com/IyYlGx2ZJWzEJIdvIb28sk" target="_blank" class="btn-trigger-confirm" title="Entrar no Grupo do WhatsApp"></a>
                     <a href="#" target="_blank" class="btn-trigger-gifts" title="Ver Lista de Presentes"></a>
                     <a href="#" target="_blank" class="btn-trigger-location" title="Ver Localização no Mapa"></a>
@@ -277,7 +263,7 @@
         const secondPage = document.getElementById('secondPage');
 
         scroller.addEventListener('scroll', () => {
-            if (scroller.scrollTop > 30) {
+            if (scroller.scrollTop > 20) {
                 secondPage.classList.add('visible');
             }
         });
