@@ -3,16 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Você foi Convidado!</title>
+    <title>Chá de Bebê - Ines & Sandro</title>
     <style>
         :root {
-            --bg-color: #0f0e17;
-            --envelope-color: #a7a9be;
-            --envelope-dark: #7f8193;
-            --envelope-lining: #ff8906;
-            --letter-bg: #fffffe;
-            --text-color: #2e2f3e;
-            --accent-color: #ff8906;
+            /* Paleta de cores extraída da sua imagem */
+            --bg-color: #0d1b15; /* Fundo escuro para destacar o convite */
+            --mint-color: #a3ccc0;
+            --off-white: #f3f4f1;
+            --text-dark: #5c4a43;
+            --accent-gold: #b38f43;
+            --letter-bg: #ffffff;
         }
 
         * {
@@ -23,287 +23,269 @@
 
         body {
             background-color: var(--bg-color);
-            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            font-family: 'Georgia', serif;
             min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
             overflow: hidden;
-            perspective: 1000px;
         }
 
-        /* Container Principal */
-        .envelope-wrapper {
+        /* Container do Convite Fechado e Aberto */
+        .invite-container {
             position: relative;
             width: 380px;
-            height: 280px;
-            background-color: var(--envelope-dark);
-            border-bottom-left-radius: 8px;
-            border-bottom-right-radius: 8px;
-            cursor: pointer;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
-            transition: transform 0.3s ease;
-        }
-
-        .envelope-wrapper:hover {
-            transform: translateY(-5px);
-        }
-
-        /* Abas do Envelope (Efeito Visual de Fechado) */
-        .envelope-wrapper::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            right: 0;
-            width: 0;
-            height: 0;
-            border-style: solid;
-            border-width: 140px 190px 140px 0;
-            border-color: transparent var(--envelope-color) transparent transparent;
-            z-index: 3;
-        }
-
-        .envelope-wrapper::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 0;
-            height: 0;
-            border-style: solid;
-            border-width: 140px 0 140px 190px;
-            border-color: transparent transparent transparent var(--envelope-color);
-            z-index: 3;
-        }
-
-        /* Aba Superior (Selo/Fechamento) */
-        .flap {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 0;
-            height: 0;
-            border-style: solid;
-            border-width: 140px 190px 0 190px;
-            border-color: var(--envelope-color) transparent transparent transparent;
-            transform-origin: top;
-            z-index: 4;
-            transition: transform 0.5s ease-in-out, z-index 0.3s step-end;
-        }
-
-        /* Base interna do envelope */
-        .envelope-base {
-            position: absolute;
-            bottom: 0;
-            width: 0;
-            height: 0;
-            border-style: solid;
-            border-width: 0 190px 140px 190px;
-            border-color: transparent transparent var(--envelope-dark) transparent;
-            z-index: 3;
-        }
-
-        /* Carta Oculta */
-        .letter {
-            position: absolute;
-            bottom: 10px;
-            left: 15px;
-            width: 350px;
-            height: 240px;
+            height: 530px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
             background-color: var(--letter-bg);
             border-radius: 4px;
-            padding: 20px;
-            padding-bottom: 40px;
-            z-index: 2;
-            transition: transform 0.6s ease-in-out, height 0.6s ease-in-out, z-index 0.3s step-end;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
-            overflow: hidden; /* Mantém oculto antes de abrir */
+            overflow: hidden;
         }
 
-        /* Texto de chamada no envelope */
-        .envelope-text {
+        /* ----------------------------------
+           O ENVELOPE (A imagem dividida)
+        ------------------------------------- */
+        .envelope-half {
             position: absolute;
-            bottom: 20px;
-            width: 100%;
-            text-align: center;
-            color: var(--bg-color);
+            top: 0;
+            width: 50%;
+            height: 100%;
+            background-image: url('convite.png'); /* Sua imagem aqui */
+            background-size: 380px 530px; /* Mantém a proporção exata do container */
+            background-repeat: no-repeat;
+            z-index: 3;
+            transition: transform 1.2s cubic-bezier(0.7, 0, 0.3, 1);
+        }
+
+        /* Metade Esquerda (Ines) */
+        .left-side {
+            left: 0;
+            background-position: left top;
+            border-right: 1px solid rgba(0,0,0,0.05);
+        }
+
+        /* Metade Direita (Sandro) */
+        .right-side {
+            right: 0;
+            background-position: right top;
+        }
+
+        /* O Selo Centralizado */
+        .wax-seal {
+            position: absolute;
+            top: 46%; /* Alinhado exatamente sobre o selo da foto */
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 65px;
+            height: 65px;
+            background-color: #8c6961; /* Tom aproximado do selo */
+            border-radius: 50%;
+            z-index: 4;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: opacity 0.5s ease, transform 0.5s ease;
+        }
+
+        /* Texto circular simulado ao redor do selo */
+        .seal-text {
+            position: absolute;
+            width: 110px;
+            height: 110px;
+            color: var(--accent-gold);
+            font-size: 11px;
             font-weight: bold;
-            z-index: 5;
-            letter-spacing: 2px;
-            pointer-events: none;
-            transition: opacity 0.3s ease;
-        }
-
-        /* ----------------------------------
-           ESTADO ABERTO (Ativado via JS)
-        ------------------------------------- */
-        
-        /* Permite rolar a tela geral quando aberto */
-        body.opened {
-            overflow-y: auto;
-            display: block;
-            padding: 50px 0;
-        }
-
-        body.opened .envelope-wrapper {
-            margin: 0 auto;
-            margin-top: 200px; /* Dá espaço para a carta subir */
-            cursor: default;
-            transform: none;
-        }
-
-        /* Gira a aba para cima */
-        body.opened .flap {
-            transform: rotateX(180deg);
-            z-index: 1;
-        }
-
-        /* Tira o texto do envelope */
-        body.opened .envelope-text {
-            opacity: 0;
-        }
-
-        /* Faz a carta subir, crescer e ativa a rolagem interna */
-        body.opened .letter {
-            transform: translateY(-220px);
-            height: 550px; /* Altura final expandida */
-            z-index: 5;
-            overflow-y: auto; /* Ativa a rolagem */
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-        }
-
-        /* Estilização da barra de rolagem da carta */
-        .letter::-webkit-scrollbar {
-            width: 6px;
-        }
-        .letter::-webkit-scrollbar-thumb {
-            background-color: rgba(0,0,0,0.2);
-            border-radius: 3px;
-        }
-
-        /* ----------------------------------
-           CONTEÚDO DA CARTA (Customizável)
-        ------------------------------------- */
-        .letter-content {
-            color: var(--text-color);
             text-align: center;
-            line-height: 1.6;
+            animation: rotateText 10s linear infinite;
+            pointer-events: none;
+            z-index: 4;
+            transition: opacity 0.4s ease;
         }
 
-        .letter-content h1 {
-            font-family: 'Georgia', serif;
-            color: var(--accent-color);
+        @keyframes rotateText {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* ----------------------------------
+           A CARTA INTERNA (Conteúdo pós-abertura)
+        ------------------------------------- */
+        .inner-letter {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            padding: 40px 25px;
+            overflow-y: auto;
+            color: var(--text-dark);
+            background-color: var(--off-white);
+            opacity: 0;
+            transition: opacity 0.6s ease;
+        }
+
+        /* Estilização interna inspirada no convite */
+        .inner-letter h2 {
+            text-align: center;
+            font-size: 26px;
+            color: var(--text-dark);
             margin-bottom: 20px;
-            font-size: 28px;
+            font-weight: normal;
         }
 
-        .letter-content p {
-            margin-bottom: 15px;
-            font-size: 16px;
+        .inner-letter p {
+            text-align: center;
+            font-size: 15px;
+            line-height: 1.6;
+            margin-bottom: 20px;
         }
 
-        .details {
-            background: #f7f7f9;
-            padding: 15px;
-            border-radius: 8px;
+        .event-details {
+            border-top: 1px solid var(--mint-color);
+            border-bottom: 1px solid var(--mint-color);
+            padding: 20px 10px;
             margin: 25px 0;
-            border-left: 4px solid var(--accent-color);
-            text-align: left;
+            text-align: center;
         }
 
-        .details-item {
-            margin-bottom: 8px;
+        .detail-row {
+            margin-bottom: 12px;
             font-size: 14px;
         }
 
-        .details-item strong {
-            color: var(--accent-color);
+        .detail-row strong {
+            color: #8c6961;
         }
 
-        .scroll-indicator {
-            margin-top: 20px;
+        .btn-confirm {
+            display: block;
+            width: 200px;
+            margin: 30px auto 10px auto;
+            background-color: var(--mint-color);
+            color: white;
+            text-align: center;
+            padding: 12px;
+            text-decoration: none;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 14px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+            transition: background 0.3s;
+        }
+
+        .btn-confirm:hover {
+            background-color: #8bb3a8;
+        }
+
+        .scroll-arrow {
+            text-align: center;
             font-size: 12px;
-            color: #888;
+            color: #999;
+            margin-top: 15px;
             animation: bounce 2s infinite;
         }
 
         @keyframes bounce {
             0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
-            40% { transform: translateY(-5px); }
+            40% { transform: translateY(-6px); }
             60% { transform: translateY(-3px); }
         }
 
-        /* Responsividade para Celulares */
+        /* ----------------------------------
+           GATILHO DE ANIMAÇÃO (Aberto)
+        ------------------------------------- */
+        .opened .left-side {
+            transform: translateX(-100%); /* Desliza para esquerda */
+        }
+
+        .opened .right-side {
+            transform: translateX(100%); /* Desliza para direita */
+        }
+
+        .opened .wax-seal {
+            opacity: 0;
+            transform: translate(-50%, -50%) scale(0.5);
+            pointer-events: none;
+        }
+
+        .opened .seal-text {
+            opacity: 0;
+        }
+
+        .opened .inner-letter {
+            opacity: 1;
+            z-index: 2;
+            transition-delay: 0.4s; /* Aparece suavemente enquanto as portas abrem */
+        }
+
+        /* Ajustes para Telas Pequenas */
         @media (max-width: 400px) {
-            .envelope-wrapper {
+            .invite-container {
                 width: 320px;
-                height: 240px;
+                height: 450px;
             }
-            .envelope-wrapper::before, .envelope-wrapper::after {
-                border-width: 120px 160px 120px 0;
-            }
-            .envelope-wrapper::after {
-                border-width: 120px 0 120px 160px;
-            }
-            .flap {
-                border-width: 120px 160px 0 160px;
-            }
-            .envelope-base {
-                border-width: 0 160px 120px 160px;
-            }
-            .letter {
-                width: 290px;
-                height: 200px;
-            }
-            body.opened .letter {
-                transform: translateY(-180px);
-                height: 480px;
+            .envelope-half {
+                background-size: 320px 450px;
             }
         }
     </style>
 </head>
 <body>
 
-    <div class="envelope-wrapper" id="envelope" onclick="openEnvelope()">
-        <div class="flap"></div>
-        <div class="envelope-base"></div>
-        <div class="envelope-text">CLIQUE PARA ABRIR</div>
+    <div class="seal-text" id="sealText">✦ clique para abrir ✦ clique para abrir </div>
+
+    <div class="invite-container" id="inviteContainer">
         
-        <div class="letter">
-            <div class="letter-content">
-                <h1>Você foi convidado!</h1>
-                <p>É com muita alegria que convido você para celebrar um momento super especial comigo.</p>
-                
-                <p>Sua presença é fundamental para deixar essa noite ainda mais inesquecível!</p>
-                
-                <div class="details">
-                    <div class="details-item">📅 <strong>Data:</strong> 15 de Outubro de 2026</div>
-                    <div class="details-item">⏰ <strong>Horário:</strong> À partir das 21:00h</div>
-                    <div class="details-item">📍 <strong>Local:</strong> Salão de Festas Vegas Neon (Rua Principal, 123)</div>
-                </div>
+        <div class="wax-seal" onclick="openInvite()">
+            <span style="color: rgba(255,255,255,0.4); font-size: 20px;">❤</span>
+        </div>
 
-                <p><strong>Dress Code:</strong> Esporte Fino com um toque de brilho.</p>
-                
-                <p>Por favor, confirme sua presença até o dia 05 de Outubro clicando no botão abaixo.</p>
-                
-                <p style="margin-top: 30px;">
-                    <a href="https://wa.me/seu-numero-aqui" target="_blank" style="background-color: var(--accent-color); color: white; padding: 12px 25px; text-decoration: none; border-radius: 25px; font-weight: bold; display: inline-block; box-shadow: 0 4px 15px rgba(255,137,6,0.3);">Confirmar Presença</a>
-                </p>
+        <div class="envelope-half left-side"></div>
+        <div class="envelope-half right-side"></div>
 
-                <div class="scroll-indicator">▼ Role para ver mais ▼</div>
-                
-                <p style="margin-top: 40px; font-size: 14px; color: #666;">Mal posso esperar para comemorar com você!</p>
+        <div class="inner-letter">
+            <h2>Chá de Bebê</h2>
+            <p>Queridos amigos e familiares, estamos preparando tudo com muito amor para a chegada do nosso maior presente.</p>
+            
+            <p>Venham comemorar conosco este momento tão especial!</p>
+
+            <div class="event-details">
+                <div class="detail-row">📅 <strong>Data:</strong> 15 de Outubro de 2026</div>
+                <div class="detail-row">⏰ <strong>Horário:</strong> À partir das 16:00h</div>
+                <div class="detail-row">📍 <strong>Local:</strong> Espaço das Oliveiras (Rua das Flores, nº 45)</div>
+            </div>
+
+            <p>Sua presença tornará nosso dia ainda mais feliz e completo.</p>
+            
+            <a href="https://wa.me/seu-numero" target="_blank" class="btn-confirm">Confirmar Presença</a>
+
+            <div class="scroll-arrow">▼ Role para ver a Lista de Presentes ▼</div>
+            
+            <div style="margin-top: 40px; text-align: center; border-top: 1px dashed #ccc; padding-top: 20px;">
+                <h3>Sugestão de Presentes</h3>
+                <p style="margin-top: 15px; font-size: 14px; color: #777;">Fraldas M ou G, ou se preferir, acesse nossa lista online.</p>
+                <p style="font-size: 13px; color: #8c6961; font-style: italic; margin-top: 25px;">Com carinho, Ines & Sandro.</p>
             </div>
         </div>
+
     </div>
 
     <script>
-        function openEnvelope() {
-            // Adiciona a classe no body para disparar as transições CSS sincronizadas
-            document.body.classList.add('opened');
-            
-            // Remove o evento de clique para evitar bugs após aberto
-            document.getElementById('envelope').removeAttribute('onclick');
+        // Transforma o texto em círculo perfeito ao redor do selo
+        const text = document.getElementById('sealText');
+        text.innerHTML = text.textContent.replace(/\S/g, "<span style='position:absolute; left:50%; transform-origin:0 55px;'>$&</span>");
+        const spans = text.querySelectorAll('span');
+        spans.forEach((span, i) => {
+            span.style.transform = `translateX(-50%) rotate(${i * 15}deg)`;
+        });
+
+        function openInvite() {
+            // Adiciona a classe que executa os cortes e transições CSS
+            document.getElementById('inviteContainer').classList.add('opened');
+            document.getElementById('sealText').classList.add('opened');
         }
     </script>
 </body>
