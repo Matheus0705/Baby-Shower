@@ -96,12 +96,11 @@
             z-index: 1;
             overflow-y: auto;
             overflow-x: hidden;
-            background-color: #f4f5f2; /* Cor aproximada do fundo do seu convite */
+            background-color: #f4f5f2; 
             opacity: 0;
             transition: opacity 1.5s ease; 
         }
 
-        /* Estilização da barra de rolagem */
         .inner-letter::-webkit-scrollbar {
             width: 4px;
         }
@@ -110,7 +109,6 @@
             border-radius: 10px;
         }
 
-        /* Estrutura das Imagens de Conteúdo */
         .content-scroller {
             width: 100%;
             display: flex;
@@ -124,23 +122,20 @@
             height: auto;
         }
 
-        /* Container da segunda imagem que guarda os botões clicáveis */
+        /* Container da segunda imagem */
         .second-page-container {
             position: relative;
             width: 100%;
-            /* Efeito de surgimento gradual da segunda imagem */
             opacity: 0.3;
             transform: translateY(40px);
             transition: all 1.2s ease-out;
         }
 
-        /* Classe ativada por rolagem para revelar a segunda imagem de forma linda */
         .second-page-container.visible {
             opacity: 1;
             transform: translateY(0);
         }
 
-        /* Indicação sutil para rolar para baixo */
         .scroll-hint {
             text-align: center;
             font-family: 'Georgia', serif;
@@ -159,33 +154,38 @@
         }
 
         /* ----------------------------------
-           ÁREAS CLICÁVEIS SOBRE A SEGUNDA FOTO
+           ÁREAS CLICÁVEIS PERSONALIZADAS
         ------------------------------------- */
         
-        /* Botão Confirmar Presença Invisível */
+        /* Botão Confirmar Presença (Grupo do WhatsApp) */
         .btn-trigger-confirm {
             position: absolute;
-            bottom: 22%; /* Ajuste essa porcentagem baseado em onde está o ícone na sua foto */
+            bottom: 22%; /* Altere a porcentagem se precisar subir ou descer */
             left: 50%;
             transform: translateX(-50%);
-            width: 200px; /* Largura da área do botão na foto */
-            height: 45px;  /* Altura da área do botão na foto */
-            background: transparent; /* Invisível */
+            width: 220px;  /* Ajuste a largura para cobrir seu ícone/botão da foto */
+            height: 50px;  /* Ajuste a altura para cobrir seu ícone/botão da foto */
             cursor: pointer;
             z-index: 5;
+            
+            /* DICA DE TESTE: Deixei vermelho fraco para você ver onde o botão está caindo na foto. */
+            /* Quando estiver no lugar certo, mude para: background: transparent; */
+            background: rgba(255, 0, 0, 0.2); 
         }
 
-        /* Botão Localização Invisível */
+        /* Botão Localização (Google Maps ou similar) */
         .btn-trigger-location {
             position: absolute;
-            bottom: 8%;  /* Ajuste essa porcentagem baseado em onde está o ícone na sua foto */
+            bottom: 8%;  /* Altere a porcentagem se precisar subir ou descer */
             left: 50%;
             transform: translateX(-50%);
-            width: 200px; 
-            height: 45px;  
-            background: transparent; 
+            width: 220px; 
+            height: 50px;  
             cursor: pointer;
             z-index: 5;
+            
+            /* Mesma dica: mude para transparent depois que alinhar perfeitamente */
+            background: rgba(255, 0, 0, 0.2); 
         }
 
         /* ----------------------------------
@@ -233,23 +233,24 @@
         <div class="envelope-gate left-gate"></div>
         <div class="envelope-gate right-gate"></div>
 
-        <!-- Conteúdo Interno com Rolagem de Imagens -->
+        <!-- Conteúdo Interno -->
         <div class="inner-letter" id="scroller">
             <div class="content-scroller">
                 
                 <!-- Primeira Imagem (conteudo.png) -->
                 <img src="conteudo.png" class="page-img" alt="Mensagem Interna">
 
-                <!-- Texto sutil avisando para continuar rolando -->
                 <div class="scroll-hint">▼ Continue lendo abaixo ▼</div>
 
-                <!-- Segunda Imagem (botoes.png) encapsulada com os links invisíveis -->
+                <!-- Segunda Imagem (botoes.png) -->
                 <div class="second-page-container" id="secondPage">
                     <img src="botoes.png" class="page-img" alt="Dados e Links">
                     
-                    <!-- LINKS INVISÍVEIS: Ficam posicionados exatamente sobre os desenhos da foto -->
-                    <a href="https://wa.me/seu-numero" target="_blank" class="btn-trigger-confirm" title="Confirmar Presença"></a>
-                    <a href="https://maps.google.com/..." target="_blank" class="btn-trigger-location" title="Ver Localização"></a>
+                    <!-- BOTÃO DO LINK DO SEU GRUPO DO WHATSAPP -->
+                    <a href="https://chat.whatsapp.com/IyYlGx2ZJWzEJIdvIb28sk" target="_blank" class="btn-trigger-confirm" title="Entrar no Grupo do WhatsApp"></a>
+                    
+                    <!-- BOTÃO DE LOCALIZAÇÃO (Substitua o '#' pelo link do Google Maps do local) -->
+                    <a href="#" target="_blank" class="btn-trigger-location" title="Ver Localização no Mapa"></a>
                 </div>
 
             </div>
@@ -262,12 +263,10 @@
             document.getElementById('inviteContainer').classList.add('opened');
         }
 
-        // Monitora o scroll interno para fazer a segunda imagem surgir com efeito suave
         const scroller = document.getElementById('scroller');
         const secondPage = document.getElementById('secondPage');
 
         scroller.addEventListener('scroll', () => {
-            // Se o usuário descer 60px na leitura, ativa o efeito fluido na segunda imagem
             if (scroller.scrollTop > 60) {
                 secondPage.classList.add('visible');
             }
