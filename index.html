@@ -7,10 +7,6 @@
     <style>
         :root {
             --bg-color: #0d1b15; 
-            --mint-color: #a3ccc0;
-            --off-white: #f3f4f1;
-            --text-dark: #5c4a43;
-            --accent-gold: #b38f43;
             --letter-bg: #ffffff;
         }
 
@@ -22,7 +18,6 @@
 
         body {
             background-color: var(--bg-color);
-            font-family: 'Georgia', serif;
             min-height: 100vh;
             display: flex;
             justify-content: center;
@@ -37,51 +32,45 @@
             width: 380px;
             height: 530px;
             box-shadow: 0 30px 60px rgba(0,0,0,0.6);
-            /* Usamos a cor escura temporariamente para camuflar qualquer fresta de pixel */
             background-color: var(--bg-color); 
-            border-radius: 4px;
+            border-radius: 8px;
             transform-style: preserve-3d; 
             transition: background-color 0.5s ease;
         }
 
-        /* Quando aberto, o fundo do container volta a ser claro para a carta */
         .invite-container.opened {
             background-color: var(--letter-bg);
         }
 
         /* ----------------------------------
-           ABAS EM 3D (Efeito Panfleto/Livro)
+           ABAS EM 3D (Capa do Convite)
         ------------------------------------- */
         .envelope-gate {
             position: absolute;
             top: 0;
-            /* Aumentado sutilmente para 50.5% para criar uma micro-sobreposição e eliminar a linha branca */
             width: 50.5%; 
             height: 100%;
-            background-image: url('convite.png'); /* Sua imagem aqui */
+            background-image: url('convite.png'); 
             background-size: 380px 530px;
             background-repeat: no-repeat;
             z-index: 3;
-            /* Transição alterada para 2.5 segundos com uma curva de velocidade super elegante */
             transition: transform 2.5s cubic-bezier(0.4, 0, 0.1, 1), box-shadow 2.5s ease;
             backface-visibility: hidden;
         }
 
-        /* Aba Esquerda (Ines) */
         .left-gate {
             left: 0;
             background-position: left top;
             transform-origin: left center;
         }
 
-        /* Aba Direita (Sandro) */
         .right-gate {
             right: 0;
             background-position: right top;
             transform-origin: right center;
         }
 
-        /* O SELO INVISÍVEL (Área de clique perfeita) */
+        /* O SELO INVISÍVEL */
         .wax-seal-trigger {
             position: absolute;
             top: 46%; 
@@ -95,13 +84,8 @@
             background: transparent; 
         }
 
-        .wax-seal-trigger:hover {
-            transform: translate(-50%, -50%) translateZ(15px) scale(1.02);
-            transition: transform 0.3s ease;
-        }
-
         /* ----------------------------------
-           A CARTA INTERNA (Conteúdo)
+           CARTA INTERNA (Imagens seguidas)
         ------------------------------------- */
         .inner-letter {
             position: absolute;
@@ -110,87 +94,103 @@
             width: 100%;
             height: 100%;
             z-index: 1;
-            padding: 40px 25px;
             overflow-y: auto;
-            color: var(--text-dark);
-            background-color: var(--off-white);
-            box-shadow: inset 0 0 30px rgba(0,0,0,0.05);
+            overflow-x: hidden;
+            background-color: #f4f5f2; /* Cor aproximada do fundo do seu convite */
             opacity: 0;
-            /* A carta surge suavemente no final da abertura */
             transition: opacity 1.5s ease; 
         }
 
-        /* Estilização interna */
-        .inner-letter h2 {
-            text-align: center;
-            font-size: 26px;
-            color: var(--text-dark);
-            margin-bottom: 20px;
-            font-weight: normal;
+        /* Estilização da barra de rolagem */
+        .inner-letter::-webkit-scrollbar {
+            width: 4px;
+        }
+        .inner-letter::-webkit-scrollbar-thumb {
+            background-color: #a3ccc0;
+            border-radius: 10px;
         }
 
-        .inner-letter p {
-            text-align: center;
-            font-size: 15px;
-            line-height: 1.6;
-            margin-bottom: 20px;
+        /* Estrutura das Imagens de Conteúdo */
+        .content-scroller {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
 
-        .event-details {
-            border-top: 1px solid var(--mint-color);
-            border-bottom: 1px solid var(--mint-color);
-            padding: 20px 10px;
-            margin: 25px 0;
-            text-align: center;
-        }
-
-        .detail-row {
-            margin-bottom: 12px;
-            font-size: 14px;
-        }
-
-        .detail-row strong {
-            color: #8c6961;
-        }
-
-        .btn-confirm {
+        .page-img {
+            width: 100%;
             display: block;
-            width: 200px;
-            margin: 30px auto 10px auto;
-            background-color: var(--mint-color);
-            color: white;
-            text-align: center;
-            padding: 12px;
-            text-decoration: none;
-            border-radius: 20px;
-            font-weight: bold;
-            font-size: 14px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.15);
-            transition: background 0.3s;
+            height: auto;
         }
 
-        .btn-confirm:hover {
-            background-color: #8bb3a8;
+        /* Container da segunda imagem que guarda os botões clicáveis */
+        .second-page-container {
+            position: relative;
+            width: 100%;
+            /* Efeito de surgimento gradual da segunda imagem */
+            opacity: 0.3;
+            transform: translateY(40px);
+            transition: all 1.2s ease-out;
         }
 
-        .scroll-arrow {
+        /* Classe ativada por rolagem para revelar a segunda imagem de forma linda */
+        .second-page-container.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Indicação sutil para rolar para baixo */
+        .scroll-hint {
             text-align: center;
-            font-size: 12px;
-            color: #999;
-            margin-top: 15px;
+            font-family: 'Georgia', serif;
+            font-size: 13px;
+            color: #7a6860;
+            padding: 15px 0;
+            background-color: #f4f5f2;
+            width: 100%;
             animation: bounce 2s infinite;
         }
 
         @keyframes bounce {
             0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
-            40% { transform: translateY(-6px); }
+            40% { transform: translateY(-5px); }
             60% { transform: translateY(-3px); }
         }
 
         /* ----------------------------------
-           GATILHO DE ANIMAÇÃO (Aberto)
+           ÁREAS CLICÁVEIS SOBRE A SEGUNDA FOTO
         ------------------------------------- */
         
+        /* Botão Confirmar Presença Invisível */
+        .btn-trigger-confirm {
+            position: absolute;
+            bottom: 22%; /* Ajuste essa porcentagem baseado em onde está o ícone na sua foto */
+            left: 50%;
+            transform: translateX(-50%);
+            width: 200px; /* Largura da área do botão na foto */
+            height: 45px;  /* Altura da área do botão na foto */
+            background: transparent; /* Invisível */
+            cursor: pointer;
+            z-index: 5;
+        }
+
+        /* Botão Localização Invisível */
+        .btn-trigger-location {
+            position: absolute;
+            bottom: 8%;  /* Ajuste essa porcentagem baseado em onde está o ícone na sua foto */
+            left: 50%;
+            transform: translateX(-50%);
+            width: 200px; 
+            height: 45px;  
+            background: transparent; 
+            cursor: pointer;
+            z-index: 5;
+        }
+
+        /* ----------------------------------
+           GATILHO DE ANIMAÇÃO 3D
+        ------------------------------------- */
         .opened .left-gate {
             transform: rotateY(-145deg);
             box-shadow: 25px 0 30px rgba(0,0,0,0.3);
@@ -226,36 +226,32 @@
 
     <div class="invite-container" id="inviteContainer">
         
-        <!-- Área de toque transparente sobre o selo -->
+        <!-- Área de clique sobre o selo -->
         <div class="wax-seal-trigger" onclick="openInvite()"></div>
 
-        <!-- Portas com micro-ajuste antiqueda de pixel/linha branca -->
+        <!-- Capas em 3D -->
         <div class="envelope-gate left-gate"></div>
         <div class="envelope-gate right-gate"></div>
 
-        <!-- Conteúdo Interno -->
-        <div class="inner-letter">
-            <h2>Chá de Bebê</h2>
-            <p>Queridos amigos e familiares, estamos preparando tudo com muito amor para a chegada do nosso maior presente.</p>
-            
-            <p>Venham comemorar conosco este momento tão especial!</p>
+        <!-- Conteúdo Interno com Rolagem de Imagens -->
+        <div class="inner-letter" id="scroller">
+            <div class="content-scroller">
+                
+                <!-- Primeira Imagem (conteudo.png) -->
+                <img src="conteudo.png" class="page-img" alt="Mensagem Interna">
 
-            <div class="event-details">
-                <div class="detail-row">📅 <strong>Data:</strong> 15 de Outubro de 2026</div>
-                <div class="detail-row">⏰ <strong>Horário:</strong> À partir das 16:00h</div>
-                <div class="detail-row">📍 <strong>Local:</strong> Espaço das Oliveiras (Rua das Flores, nº 45)</div>
-            </div>
+                <!-- Texto sutil avisando para continuar rolando -->
+                <div class="scroll-hint">▼ Continue lendo abaixo ▼</div>
 
-            <p>Sua presença tornará nosso dia ainda mais feliz e completo.</p>
-            
-            <a href="https://wa.me/seu-numero" target="_blank" class="btn-confirm">Confirmar Presença</a>
+                <!-- Segunda Imagem (botoes.png) encapsulada com os links invisíveis -->
+                <div class="second-page-container" id="secondPage">
+                    <img src="botoes.png" class="page-img" alt="Dados e Links">
+                    
+                    <!-- LINKS INVISÍVEIS: Ficam posicionados exatamente sobre os desenhos da foto -->
+                    <a href="https://wa.me/seu-numero" target="_blank" class="btn-trigger-confirm" title="Confirmar Presença"></a>
+                    <a href="https://maps.google.com/..." target="_blank" class="btn-trigger-location" title="Ver Localização"></a>
+                </div>
 
-            <div class="scroll-arrow">▼ Role para ver a Lista de Presentes ▼</div>
-            
-            <div style="margin-top: 40px; text-align: center; border-top: 1px dashed #ccc; padding-top: 20px;">
-                <h3>Sugestão de Presentes</h3>
-                <p style="margin-top: 15px; font-size: 14px; color: #777;">Fraldas M ou G, ou se preferir, acesse nossa lista online.</p>
-                <p style="font-size: 13px; color: #8c6961; font-style: italic; margin-top: 25px;">Com carinho, Ines & Sandro.</p>
             </div>
         </div>
 
@@ -265,6 +261,17 @@
         function openInvite() {
             document.getElementById('inviteContainer').classList.add('opened');
         }
+
+        // Monitora o scroll interno para fazer a segunda imagem surgir com efeito suave
+        const scroller = document.getElementById('scroller');
+        const secondPage = document.getElementById('secondPage');
+
+        scroller.addEventListener('scroll', () => {
+            // Se o usuário descer 60px na leitura, ativa o efeito fluido na segunda imagem
+            if (scroller.scrollTop > 60) {
+                secondPage.classList.add('visible');
+            }
+        });
     </script>
 </body>
 </html>
