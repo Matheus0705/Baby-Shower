@@ -7,7 +7,7 @@
     <style>
         :root {
             --bg-color: #0d1b15; 
-            --invite-bg: #f3f3ee; /* Tom de fundo das suas imagens */
+            --invite-bg: #f3f3ee; /* Cor de fundo das imagens */
         }
 
         * {
@@ -16,46 +16,38 @@
             padding: 0;
         }
 
-        /* Ajuste do corpo para sumir com as bordas pretas vazias */
         body {
             background-color: var(--bg-color);
             min-height: 100vh;
-            min-height: -webkit-fill-available; /* Correção para navegadores iOS (Safari) */
             display: flex;
             justify-content: center;
             align-items: center;
             overflow: hidden;
-            perspective: 1500px; 
             font-family: 'Georgia', serif;
         }
 
         /* ----------------------------------
-           CONTAINER RESPONSIVO (TELA CHEIA NO MOBILE)
+           CONTAINER INTELIGENTE (HÍBRIDO)
         ------------------------------------- */
         .invite-container {
             position: relative;
-            width: 100vw;
-            height: 100vh;
-            height: -webkit-fill-available;
-            max-width: 420px; /* Mantém um limite elegante caso abram no computador */
-            max-height: 740px;
+            width: 380px;  /* Tamanho padrão seguro para PC */
+            height: 530px; /* Tamanho padrão seguro para PC */
             background-color: var(--invite-bg); 
-            box-shadow: 0 20px 50px rgba(0,0,0,0.4);
-            transform-style: preserve-3d; 
-            transition: background-color 0.5s ease;
+            box-shadow: 0 30px 60px rgba(0,0,0,0.5);
+            perspective: 1500px; /* Efeito 3D isolado aqui dentro */
         }
 
         /* ----------------------------------
-           ABAS EM 3D (Capa Ajustável)
+           ABAS EM 3D (Capa do Convite)
         ------------------------------------- */
         .envelope-gate {
             position: absolute;
             top: 0;
-            width: 50.6%; /* Micro sobreposição para evitar a linha branca no meio */
+            width: 50.6%; 
             height: 100%;
             background-image: url('convite.png'); 
             background-size: cover;
-            background-position: center;
             background-repeat: no-repeat;
             z-index: 3;
             transition: transform 2.5s cubic-bezier(0.4, 0, 0.1, 1), box-shadow 2.5s ease;
@@ -74,16 +66,14 @@
             transform-origin: right center;
         }
 
-        /* O SELO INVISÍVEL (Área de toque centralizada na proporção da tela) */
+        /* O SELO INVISÍVEL (Centralizado sobre a emenda) */
         .wax-seal-trigger {
             position: absolute;
             top: 46%; 
             left: 50%;
-            transform: translate(-50%, -50%) translateZ(10px);
-            width: 25vw; 
-            max-width: 110px;
-            height: 25vw;
-            max-height: 110px;
+            transform: translate(-50%, -50%);
+            width: 100px; 
+            height: 100px;
             border-radius: 50%;
             z-index: 4;
             cursor: pointer;
@@ -91,7 +81,7 @@
         }
 
         /* ----------------------------------
-           CARTA INTERNA IMERSIVA
+           CARTA INTERNA (Com Rolagem)
         ------------------------------------- */
         .inner-letter {
             position: absolute;
@@ -105,10 +95,10 @@
             background-color: var(--invite-bg); 
             opacity: 0;
             transition: opacity 1.5s ease; 
-            -webkit-overflow-scrolling: touch; /* Rolagem macia no iPhone */
+            -webkit-overflow-scrolling: touch;
         }
 
-        /* Esconde a barra de rolagem para o visual ficar ultra limpo */
+        /* Esconde a barra de rolagem para o design ficar limpo */
         .inner-letter::-webkit-scrollbar {
             display: none;
         }
@@ -144,7 +134,7 @@
             text-align: center;
             font-size: 13px;
             color: #7a6860;
-            padding: 20px 0;
+            padding: 15px 0;
             background-color: var(--invite-bg);
             width: 100%;
             animation: bounce 2s infinite;
@@ -157,7 +147,7 @@
         }
 
         /* ----------------------------------
-           ÁREAS CLICÁVEIS PROPORCIONAIS NA TELA
+           ÁREAS CLICÁVEIS AJUSTADAS
         ------------------------------------- */
         
         /* 1. Ícone do Check (Confirme sua presença) */
@@ -166,8 +156,7 @@
             top: 35%; 
             left: 10%; 
             width: 22%;  
-            height: 16vw;
-            max-height: 80px;  
+            height: 22%;  
             border-radius: 50%;
             cursor: pointer;
             z-index: 5;
@@ -180,8 +169,7 @@
             bottom: 2%;
             left: 2%;
             width: 38%;
-            height: 22vw;
-            max-height: 120px;
+            height: 22%;
             cursor: pointer;
             z-index: 5;
             background: transparent;
@@ -193,15 +181,14 @@
             bottom: 11%;  
             right: 10%;
             width: 20%; 
-            height: 18vw;  
-            max-height: 95px;
+            height: 18%;  
             cursor: pointer;
             z-index: 5;
             background: transparent; 
         }
 
         /* ----------------------------------
-           GATILHO DE ANIMAÇÃO 3D
+           GATILHOS DE ANIMAÇÃO 3D
         ------------------------------------- */
         .opened .left-gate {
             transform: rotateY(-145deg);
@@ -222,16 +209,20 @@
             z-index: 2;
         }
 
-        /* Adaptação agressiva para Celulares ficarem 100% tela cheia real */
+        /* ----------------------------------
+           A MÁGICA DO MOBILE (TELA CHEIA REAL)
+        ------------------------------------- */
         @media (max-width: 480px) {
+            body {
+                background-color: var(--invite-bg); /* Remove o fundo verde escuro no celular */
+            }
             .invite-container {
+                width: 100vw;
+                height: 100vh;
                 max-width: 100vw;
                 max-height: 100vh;
-                border-radius: 0; /* Remove bordinhas nos cantos para virar tela cheia de verdade */
+                border-radius: 0;
                 box-shadow: none;
-            }
-            body {
-                background-color: var(--invite-bg); /* O fundo preto vira o fundo do convite no celular */
             }
         }
     </style>
@@ -284,8 +275,7 @@
         const secondPage = document.getElementById('secondPage');
 
         scroller.addEventListener('scroll', () => {
-            // Ativa quando o usuário rola um pouquinho a página
-            if (scroller.scrollTop > 40) {
+            if (scroller.scrollTop > 30) {
                 secondPage.classList.add('visible');
             }
         });
