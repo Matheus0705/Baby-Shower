@@ -27,57 +27,71 @@
         }
 
         /* ----------------------------------
-           CONTAINER (Adaptável e Nítido)
+           CONTAINER (Travado na proporção da foto)
         ------------------------------------- */
         .invite-container {
             position: relative;
             width: 100vw;
-            max-width: 400px; /* Limite elegante para telas grandes/PC */
-            aspect-ratio: 380 / 530; /* Força a proporção perfeita da sua imagem original */
-            background-color: var(--bg-color); 
-            box-shadow: 0 30px 60px rgba(0,0,0,0.5);
+            max-width: 380px; 
+            aspect-ratio: 380 / 530; 
+            background-color: var(--invite-bg); 
+            box-shadow: 0 30px 60px rgba(0,0,0,0.4);
             perspective: 2000px; 
         }
 
-        .invite-container.opened {
-            background-color: var(--invite-bg);
-        }
-
         /* ----------------------------------
-           ABAS EM 3D (Corte e Alinhamento Perfeitos)
+           ABAS EM 3D (Máxima Nitidez com Tag Img)
         ------------------------------------- */
         .envelope-gate {
             position: absolute;
             top: 0;
-            width: 50.5%; 
+            width: 50%; /* Divisão exata ao meio para não criar degraus */
             height: 100%;
-            background-image: url('convite.png'); 
-            background-size: 200% 100%; /* Faz a imagem cobrir as duas abas proporcionalmente */
-            background-repeat: no-repeat;
+            overflow: hidden;
             z-index: 3;
             transition: transform 2.2s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 2.2s ease;
             backface-visibility: hidden;
+            background-color: var(--invite-bg);
         }
 
         .left-gate {
             left: 0;
-            background-position: left center;
             transform-origin: left center;
         }
 
         .right-gate {
             right: 0;
-            background-position: right center;
             transform-origin: right center;
         }
 
-        /* O SELO INVISÍVEL COBRINHO O BOTÃO CENTRAL */
+        /* Força o navegador a renderizar os traços finos sem borrar */
+        .gate-img {
+            position: absolute;
+            top: 0;
+            height: 100%;
+            width: 200%; /* A imagem interna tem o dobro do tamanho da aba */
+            display: block;
+            object-fit: cover;
+            image-rendering: -webkit-optimize-contrast;
+            image-rendering: crisp-edges;
+            image-rendering: pixelated;
+        }
+
+        .left-gate .gate-img {
+            left: 0;
+        }
+
+        .right-gate .gate-img {
+            right: 0;
+        }
+
+        /* O SELO INVISÍVEL CENTRAL */
         .wax-seal-trigger {
             position: absolute;
             top: 46%; 
             left: 50%;
-            transform: translate(-50%, -50%) translateZ(5px);
-            width: 24%; 
+            transform: translate(-50%, -50%) translateZ(10px);
+            width: 25%; 
             aspect-ratio: 1 / 1;
             border-radius: 50%;
             z-index: 4;
@@ -86,7 +100,7 @@
         }
 
         /* ----------------------------------
-           CARTA INTERNA (Resolução Máxima)
+           CARTA INTERNA (Resolução Limpa)
         ------------------------------------- */
         .inner-letter {
             position: absolute;
@@ -99,7 +113,7 @@
             overflow-x: hidden;
             background-color: var(--invite-bg); 
             opacity: 0;
-            transition: opacity 1s ease; 
+            transition: opacity 0.8s ease; 
             -webkit-overflow-scrolling: touch;
         }
 
@@ -117,10 +131,11 @@
         .page-img {
             width: 100%;
             display: block;
-            height: auto; /* Garante que a imagem use sua resolução nativa sem achatar */
+            height: auto;
+            image-rendering: -webkit-optimize-contrast;
+            image-rendering: crisp-edges;
         }
 
-        /* Container da segunda página */
         .second-page-container {
             position: relative;
             width: 100%;
@@ -151,7 +166,7 @@
         }
 
         /* ----------------------------------
-           ÁREAS CLICÁVEIS MAPEADAS POR PORCENTAGEM
+           BOTÕES MAPEADOS
         ------------------------------------- */
         .btn-trigger-confirm {
             position: absolute;
@@ -187,17 +202,15 @@
             background: transparent; 
         }
 
-        /* ----------------------------------
-           GATILHOS DE ANIMAÇÃO 3D
-        ------------------------------------- */
+        /* ANIMAÇÕES 3D */
         .opened .left-gate {
-            transform: rotateY(-150deg);
-            box-shadow: 20px 0 25px rgba(0,0,0,0.15);
+            transform: rotateY(-155deg);
+            box-shadow: 15px 0 20px rgba(0,0,0,0.15);
         }
 
         .opened .right-gate {
-            transform: rotateY(150deg);
-            box-shadow: -20px 0 25px rgba(0,0,0,0.15);
+            transform: rotateY(155deg);
+            box-shadow: -15px 0 20px rgba(0,0,0,0.15);
         }
 
         .opened .wax-seal-trigger {
@@ -209,13 +222,12 @@
             z-index: 2;
         }
 
-        /* Ajuste fino para telas mobile se adaptarem ao tamanho vivificado */
+        /* Mantém o fundo branco nas laterais do celular se a tela for muito larga */
         @media (max-width: 480px) {
             body {
-                background-color: var(--invite-bg); /* Integra o fundo das laterais caso sobre espaço */
+                background-color: var(--invite-bg); 
             }
             .invite-container {
-                width: 100vw; /* Ocupa a largura total real do visor do celular */
                 box-shadow: none;
             }
         }
@@ -225,14 +237,16 @@
 
     <div class="invite-container" id="inviteContainer">
         
-        <!-- Clique para abrir sobre o selo original -->
         <div class="wax-seal-trigger" onclick="openInvite()"></div>
 
-        <!-- Capas em 3D sem cortes ou duplicações -->
-        <div class="envelope-gate left-gate"></div>
-        <div class="envelope-gate right-gate"></div>
+        <div class="envelope-gate left-gate">
+            <img src="convite.png" class="gate-img" alt="">
+        </div>
 
-        <!-- Conteúdo Interno Nítido -->
+        <div class="envelope-gate right-gate">
+            <img src="convite.png" class="gate-img" alt="">
+        </div>
+
         <div class="inner-letter" id="scroller">
             <div class="content-scroller">
                 
@@ -243,7 +257,6 @@
                 <div class="second-page-container" id="secondPage">
                     <img src="botoes.png" class="page-img" alt="Dados e Links">
                     
-                    <!-- Link de Confirmação perfeitamente posicionado sobre o círculo do check -->
                     <a href="https://chat.whatsapp.com/IyYlGx2ZJWzEJIdvIb28sk" target="_blank" class="btn-trigger-confirm" title="Entrar no Grupo do WhatsApp"></a>
                     <a href="#" target="_blank" class="btn-trigger-gifts" title="Ver Lista de Presentes"></a>
                     <a href="#" target="_blank" class="btn-trigger-location" title="Ver Localização no Mapa"></a>
